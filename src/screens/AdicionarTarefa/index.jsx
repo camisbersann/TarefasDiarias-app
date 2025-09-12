@@ -5,6 +5,7 @@ import { Picker } from "@react-native-picker/picker";
 import { TaskContext } from "../../context/TaskContext";
 import { format, isBefore, startOfDay } from "date-fns";
 
+
 export default function AddTarefa({ navigation }) {
   const { addTarefa, editTarefa, tarefaParaEditar, setTarefaParaEditar } = useContext(TaskContext);
 
@@ -150,15 +151,30 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold", 
-    marginTop: 12 },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 12, marginTop: 4 },
+    marginTop: 25, 
+  },
+  input: { 
+    borderWidth: 1.5, 
+    borderColor: "#779ECB", 
+    borderRadius: 14, 
+    padding: 12, 
+    marginTop: 10 
+  },
   button: { 
-    backgroundColor: "#FDFD96", 
+    backgroundColor: "#779ECB", 
     padding: 12, 
     borderRadius: 14, 
     marginTop: 20, 
     alignItems: "center", 
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  mensagem: { color: "#CF0E0E", marginTop: 10, textAlign: "center", fontSize: 15 }
+  buttonText: { 
+    color: "#fff", 
+    fontSize: 16, 
+    fontWeight: "bold" 
+  },
+  mensagem: { 
+    color: "#CF0E0E", 
+    marginTop: 10, 
+    textAlign: "center", 
+    fontSize: 15 }
 });

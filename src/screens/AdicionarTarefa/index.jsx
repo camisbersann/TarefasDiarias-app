@@ -136,7 +136,7 @@ export default function AddTarefa({ navigation }) {
 
       {tarefaParaEditar && (
         <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
-          <Text style={styles.cancelButtonText}>Cancelar Edição</Text>
+          <Text style={styles.buttonText}>Cancelar Edição</Text>
         </TouchableOpacity>
       )}
     </View>

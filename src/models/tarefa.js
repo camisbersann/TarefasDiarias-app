@@ -6,6 +6,7 @@ export default class TarefaClass {
 
      // Método construtor
     constructor(titulo, descricao, data, prioridade) {
+        this.id = this.geraId()
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;

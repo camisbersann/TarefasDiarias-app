@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -14,7 +14,9 @@ const Stack = createNativeStackNavigator();
 function WelcomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo!</Text>
+      <Text style={styles.title}>Seja bem-vindo!</Text>
+      <Text style={styles.subtitle}>✨Organize suas tarefas de forma prática e conquiste mais produtividade no seu dia a dia!</Text>
+      <Image source={require("./assets/icon-list.png")} style={styles.logo}/>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("AddTarefa")}
@@ -38,7 +40,7 @@ export default function App() {
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
-            options={{ title: "Adicionar Tarefa" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="MinhasTarefas"
@@ -60,22 +62,32 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 28,
+    fontSize: 35,
     fontWeight: "bold",
     marginBottom: 40,
   },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 35,
+    textAlign: "center",
+  },
   button: {
-    backgroundColor: "#6200ee",
+    backgroundColor: "#779ECB",
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 8,
-    marginVertical: 10,
+    borderRadius: 14,
+    marginVertical: 20,
     width: "80%",
     alignItems: "center",
   },
   buttonText: {
-    color: "#fff",
+    color: "#FFF",
     fontSize: 18,
     fontWeight: "600",
+  },
+  logo: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain",
   },
 });

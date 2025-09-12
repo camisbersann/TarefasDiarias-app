@@ -82,7 +82,7 @@ export default function AddTarefa({ navigation }) {
         onChangeText={setTitulo}
       />
 
-      <Text style={styles.label}>Descrição</Text>
+      <Text style={styles.label}>Descrição*</Text>
       <TextInput
         style={styles.input}
         placeholder="Digite a descrição"
@@ -105,7 +105,7 @@ export default function AddTarefa({ navigation }) {
         />
       )}
 
-      <Text style={styles.label}>Prioridade</Text>
+      <Text style={styles.label}>Prioridade*</Text>
       <Picker
         selectedValue={prioridade}
         onValueChange={(itemValue) => setPrioridade(itemValue)}
@@ -131,7 +131,13 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
   label: { fontWeight: "bold", marginTop: 12 },
   input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 12, marginTop: 4 },
-  button: { backgroundColor: "#007bff", padding: 14, borderRadius: 8, marginTop: 20, alignItems: "center" },
+  button: { 
+    backgroundColor: "#FDFD96", 
+    padding: 12, 
+    borderRadius: 14, 
+    marginTop: 20, 
+    alignItems: "center", 
+  },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  mensagem: { color: "#861A22", marginTop: 10, textAlign: "center" }
+  mensagem: { color: "#CF0E0E", marginTop: 10, textAlign: "center", fontSize: 15 }
 });

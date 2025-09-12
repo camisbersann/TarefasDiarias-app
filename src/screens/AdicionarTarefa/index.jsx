@@ -22,6 +22,10 @@ export default function AddTarefa({ navigation }) {
       setDescricao(tarefaParaEditar.descricao);
       setData(new Date(tarefaParaEditar.data));
       setPrioridade(tarefaParaEditar.prioridade);
+
+      navigation.setOptions({title: "Editar Tarefa"});
+    } else {
+      navigation.setOptions({title: "Adicionar Tarefa"});
     }
   }, [tarefaParaEditar]);
 
@@ -69,6 +73,11 @@ export default function AddTarefa({ navigation }) {
       setPrioridade("Média");
     }
 
+    navigation.navigate("MinhasTarefas");
+  };
+
+  const handleCancel = () => {
+    setTarefaParaEditar(null); 
     navigation.navigate("MinhasTarefas");
   };
 
@@ -120,16 +129,28 @@ export default function AddTarefa({ navigation }) {
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>
-          {tarefaParaEditar ? "Editar Tarefa" : "Adicionar Tarefa"}
+          {tarefaParaEditar ? "Salvar Alterações" : "Adicionar Tarefa"}
         </Text>
       </TouchableOpacity>
+
+      {tarefaParaEditar && (
+        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
+          <Text style={styles.cancelButtonText}>Cancelar Edição</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
-  label: { fontWeight: "bold", marginTop: 12 },
+  container: { 
+    flex: 1, 
+    padding: 16, 
+    backgroundColor: "#f4f4f4" 
+  },
+  label: {
+    fontWeight: "bold", 
+    marginTop: 12 },
   input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 12, marginTop: 4 },
   button: { 
     backgroundColor: "#FDFD96", 

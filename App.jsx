@@ -23,6 +23,13 @@ function WelcomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Adicionar Tarefa</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("MinhasTarefas")}
+      >
+        <Text style={styles.buttonText}>Minhas Tarefas</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -35,7 +42,15 @@ export default function App() {
           <Stack.Screen
             name="AddTarefa"
             component={AddTarefa}
-            options={{ title: "Adicionar Tarefa" }}
+            options={{ title: "Adicionar Tarefa",
+            headerStyle:{
+              backgroundColor: "#F2F0EF",
+            },
+            headerTitleStyle:{
+              fontSize: 20,
+            },
+            headerTitleAlign:"center"
+          }} 
           />
           <Stack.Screen
             name="WelcomeScreen"
@@ -45,7 +60,15 @@ export default function App() {
           <Stack.Screen
             name="MinhasTarefas"
             component={MinhasTarefas}
-            options={{ title: "Ver minhas tarefas" }}
+            options={{ title: "Ver minhas tarefas",
+            headerStyle:{
+              backgroundColor: "#F2F0EF",
+            },
+            headerTitleStyle:{
+              fontSize: 20,
+            },
+            headerTitleAlign:"center"
+          }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -58,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#F2F0EF",
     padding: 20,
   },
   title: {
@@ -76,7 +99,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 14,
-    marginVertical: 20,
+    marginVertical: 15,
     width: "80%",
     alignItems: "center",
   },

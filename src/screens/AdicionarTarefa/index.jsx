@@ -1,52 +1,74 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { TaskContext } from "../../context/TaskContext";
+import { format, isBefore, startOfDay } from "date-fns";
 
-export default function AddTarefa({ navigation, route }) {
+export default function AddTarefa({ navigation }) {
   const { addTarefa, editTarefa, tarefaParaEditar, setTarefaParaEditar } = useContext(TaskContext);
 
-  // estados do formulário
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [data, setData] = useState("");
+  const [data, setData] = useState(null); // agora é um Date
   const [prioridade, setPrioridade] = useState("Média");
   const [mensagem, setMensagem] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
 
   // Preenche o formulário se for edição
   useEffect(() => {
     if (tarefaParaEditar) {
       setTitulo(tarefaParaEditar.titulo);
       setDescricao(tarefaParaEditar.descricao);
-      setData(tarefaParaEditar.data);
+      setData(new Date(tarefaParaEditar.data));
       setPrioridade(tarefaParaEditar.prioridade);
     }
   }, [tarefaParaEditar]);
 
+  const handleDateChange = (event, selectedDate) => {
+    setShowPicker(Platform.OS === "ios"); // fecha no Android
+    if (selectedDate) {
+      const hoje = startOfDay(new Date());
+      const dataSelecionada = startOfDay(selectedDate);
+
+      if (isBefore(dataSelecionada, hoje)) {
+        setMensagem("Não é possível criar tarefa em data passada!");
+        setTimeout(() => setMensagem(""), 3000);
+        return;
+      }
+
+      setData(dataSelecionada); // salva Date corretamente
+      setMensagem("");
+    }
+  };
+
   const handleSubmit = () => {
     if (!titulo || !data) {
-      setMensagem("Título e Data são obrigatórios!");
+      setMensagem("Todos os campos são obrigatórios!");
+      setTimeout(() => setMensagem(""), 3000);
       return;
     }
 
+    const dataFormatada = format(data, "yyyy-MM-dd");
+
     if (tarefaParaEditar) {
-      editTarefa(tarefaParaEditar.id, titulo, descricao, data, prioridade);
+      editTarefa(tarefaParaEditar.id, titulo, descricao, dataFormatada, prioridade);
       setMensagem("Tarefa editada com sucesso!");
-      setTarefaParaEditar(null); // limpa o estado
+      setTarefaParaEditar(null);
     } else {
-      addTarefa(titulo, descricao, data, prioridade);
+      addTarefa(titulo, descricao, dataFormatada, prioridade);
       setMensagem("Tarefa adicionada com sucesso!");
     }
 
-    // limpa formulário se for adicionar nova tarefa
+    setTimeout(() => setMensagem(""), 3000);
+
     if (!tarefaParaEditar) {
       setTitulo("");
       setDescricao("");
-      setData("");
+      setData(null);
       setPrioridade("Média");
     }
 
-    // opcional: voltar para MinhasTarefas
     navigation.navigate("MinhasTarefas");
   };
 
@@ -69,12 +91,19 @@ export default function AddTarefa({ navigation, route }) {
       />
 
       <Text style={styles.label}>Data *</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="AAAA-MM-DD"
-        value={data}
-        onChangeText={setData}
-      />
+      <TouchableOpacity style={styles.input} onPress={() => setShowPicker(true)}>
+        <Text>{data ? format(data, "dd/MM/yyyy") : "Selecione a data"}</Text>
+      </TouchableOpacity>
+
+      {showPicker && (
+        <DateTimePicker
+          value={data || new Date()}
+          mode="date"
+          display={Platform.OS === "ios" ? "inline" : "calendar"}
+          onChange={handleDateChange}
+          minimumDate={new Date()} // não permite datas passadas
+        />
+      )}
 
       <Text style={styles.label}>Prioridade</Text>
       <Picker
@@ -94,10 +123,6 @@ export default function AddTarefa({ navigation, route }) {
           {tarefaParaEditar ? "Editar Tarefa" : "Adicionar Tarefa"}
         </Text>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("MinhasTarefas")}>
-  <Text>Ir para MinhasTarefas</Text>
-</TouchableOpacity>
     </View>
   );
 }
@@ -105,8 +130,8 @@ export default function AddTarefa({ navigation, route }) {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
   label: { fontWeight: "bold", marginTop: 12 },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 8, marginTop: 4 },
+  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 12, marginTop: 4 },
   button: { backgroundColor: "#007bff", padding: 14, borderRadius: 8, marginTop: 20, alignItems: "center" },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  mensagem: { color: "green", marginTop: 10, textAlign: "center" }
+  mensagem: { color: "#861A22", marginTop: 10, textAlign: "center" }
 });

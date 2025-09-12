@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { TaskContext } from '../../context/TaskContext';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function MinhasTarefas({ navigation }) {
   const { tarefas, removeTarefa, toggleConcluida, setTarefaParaEditar } = useContext(TaskContext);
@@ -23,11 +23,7 @@ export default function MinhasTarefas({ navigation }) {
         <View style={styles.actions}>
           {/* Concluir */}
           <TouchableOpacity onPress={() => toggleConcluida(item.id)}>
-            <Icon
-              name="check-circle"
-              size={24}
-              color={isConcluida ? 'green' : 'gray'}
-            />
+           <FontAwesome name="check-circle" size={30} color={isConcluida ? 'green' : 'gray'} />
           </TouchableOpacity>
 
           {/* Editar */}
@@ -37,12 +33,12 @@ export default function MinhasTarefas({ navigation }) {
               navigation.navigate('AddTarefa', { editar: true });
             }}
           >
-            <Icon name="edit" size={24} color="blue" />
+            <FontAwesome name="edit" size={30} color="blue" />
           </TouchableOpacity>
 
           {/* Excluir */}
           <TouchableOpacity onPress={() => removeTarefa(item.id)}>
-            <Icon name="delete" size={24} color="red" />
+           <FontAwesome name="trash" size={30} color="red" />
           </TouchableOpacity>
         </View>
       </View>
@@ -75,8 +71,16 @@ export default function MinhasTarefas({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f5f5f5' },
-  contador: { fontSize: 16, fontWeight: 'bold', marginBottom: 12 },
+  container: { 
+    flex: 1, 
+    padding: 16, 
+    backgroundColor: '#f5f5f5' 
+  },
+  contador: { 
+    fontSize: 16, 
+    fontWeight: 'bold', 
+    marginBottom: 12 
+  },
   card: {
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -87,12 +91,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 2
   },
-  cardContent: { flex: 1, marginRight: 8 },
-  titulo: { fontSize: 16, fontWeight: 'bold', marginBottom: 4 },
-  descricao: { fontSize: 14, color: '#555', marginBottom: 4 },
-  info: { fontSize: 12, color: '#888' },
-  actions: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  empty: { textAlign: 'center', marginTop: 50, color: '#555' },
+  cardContent: { 
+    flex: 1, 
+    marginRight: 8 
+  },
+  titulo: { 
+    fontSize: 16, 
+    fontWeight: 'bold', 
+    marginBottom: 4 
+  },
+  descricao: { 
+    fontSize: 14, 
+    color: '#555', 
+    marginBottom: 4 
+  },
+  info: { 
+    fontSize: 12, 
+    color: '#888' 
+  },
+  actions: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 15 
+  },
+  empty: { 
+    textAlign: 'center', 
+    marginTop: 50, 
+    color: '#555' 
+  },
   addButton: {
     backgroundColor: '#007bff',
     padding: 14,
@@ -100,5 +126,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10
   },
-  addButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 }
+  addButtonText: { 
+    color: '#fff', 
+    fontWeight: 'bold', 
+    fontSize: 16 
+  },
 });

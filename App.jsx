@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import AddTarefa from "./src/screens/AdicionarTarefa";
+import MinhasTarefas from "./src/screens/MinhasTarefas";
 import { TaskProvider } from "./src/context/TaskContext";
 
 const Stack = createNativeStackNavigator();
@@ -38,6 +39,11 @@ export default function App() {
             name="WelcomeScreen"
             component={WelcomeScreen}
             options={{ title: "Adicionar Tarefa" }}
+          />
+          <Stack.Screen
+            name="MinhasTarefas"
+            component={MinhasTarefas}
+            options={{ title: "Ver minhas tarefas" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

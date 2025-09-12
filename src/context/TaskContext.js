@@ -1,45 +1,52 @@
-import { createContext, useState } from 'react'; // Importa createContext e useState do React
-import TarefaList from '../models/tarefaList'; // Importa a classe TarefaList que gerencia a lista de tarefas
+import React, { createContext, useState } from "react";
+import TarefaClass from "../models/tarefa";
 
-// Cria o contexto que será compartilhado entre componentes
 export const TaskContext = createContext();
 
-// Componente provedor do contexto (Provider)
-export const TaskProvider = ({children}) => {
-    const [tarefasList] = useState(new TarefaList()); // Cria o estado para a lista de tarefas, usando a classe TarefaList
-    const [atualizarConatdor, setAtualizar] = useState(0);   // Cria um estado para forçar atualização do componente
+export const TaskProvider = ({ children }) => {
+  const [tarefas, setTarefas] = useState([]); // array vazio
+  const [tarefaParaEditar, setTarefaParaEditar] = useState(null);
 
-    const atualizar = () => setAtualizar(prev => prev + 1);  // Função para atualizar o estado e forçar re-render
+  const addTarefa = (titulo, descricao, data, prioridade) => {
+    const nova = new TarefaClass(titulo, descricao, data, prioridade);
+    setTarefas([...tarefas, nova]);
+  };
 
-    // Função para adicionar uma tarefa
-    const addTarefa = (titulo, descricao, data, prioridade) => {
-        tarefasList.addTarefa(titulo, descricao, data, prioridade);
-        atualizar();
-    }
+  const editTarefa = (id, titulo, descricao, data, prioridade) => {
+    setTarefas(
+      tarefas.map((t) =>
+        t.id === id ? { ...t, titulo, descricao, data, prioridade } : t
+      )
+    );
+  };
 
-     // Função para remover uma tarefa pelo ID
-    const removeTarefa = (id) => {
-        tarefasList.removeTarefa(id);
-        atualizar();
-    }
+  const removeTarefa = (id) => {
+    setTarefas(tarefas.filter((t) => t.id !== id));
+  };
 
-     // Função para editar uma tarefa existente
-    const editTarefa = (id, dados) => {
-        tarefasList.updateTarefa(id, dados.titulo, dados.descricao, dados.data, dados.prioridade);
-        atualizar();
-    }
+  const toggleConcluida = (id) => {
+    setTarefas(
+      tarefas.map((t) =>
+        t.id === id
+          ? { ...t, status: t.status === "concluída" ? "pendente" : "concluída" }
+          : t
+      )
+    );
+  };
 
-     // Função para alternar o status de uma tarefa
-    const toggleStatus = (id) => {
-        tarefasList.toggleStatus(id);
-        atualizar();
-    }
-
-    // O Provider disponibiliza funções e a lista de tarefas para todos os componentes filhos
-    return (
-        <TaskContext.Provider value={{addTarefa, removeTarefa, editTarefa, toggleStatus, tarefasList}}>
-            {children}
-        </TaskContext.Provider>
-    )
-
-}
+  return (
+    <TaskContext.Provider
+      value={{
+        tarefas,
+        addTarefa,
+        editTarefa,
+        removeTarefa,
+        toggleConcluida,
+        tarefaParaEditar,
+        setTarefaParaEditar,
+      }}
+    >
+      {children}
+    </TaskContext.Provider>
+  );
+};

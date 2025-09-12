@@ -1,90 +1,112 @@
-import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity} from "react-native";
-import { TaskContext } from "../../context/TaskContext";
+import React, { useState, useContext, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { TaskContext } from "../../context/TaskContext";
 
-export default function AddTarefa() {
-    const {addTarefa} = useContext(TaskContext);
+export default function AddTarefa({ navigation, route }) {
+  const { addTarefa, editTarefa, tarefaParaEditar, setTarefaParaEditar } = useContext(TaskContext);
 
-    const [titulo, setTitulo] = useState("");
-    const [descricao, setDescricao] = useState("");
-    const [data, setData] = useState("");
-    const [prioridade, setPrioridade] = useState("");
-    const [mensagem, setMensagem] = useState("");
-    const [tipoMensgem, setTipoMensagem] = useState("");
+  // estados do formulário
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [data, setData] = useState("");
+  const [prioridade, setPrioridade] = useState("Média");
+  const [mensagem, setMensagem] = useState("");
 
-    const clearInputs = () => {
-        setTitulo("");
-        setDescricao("");
-        setData("");
-        setPrioridade("");
+  // Preenche o formulário se for edição
+  useEffect(() => {
+    if (tarefaParaEditar) {
+      setTitulo(tarefaParaEditar.titulo);
+      setDescricao(tarefaParaEditar.descricao);
+      setData(tarefaParaEditar.data);
+      setPrioridade(tarefaParaEditar.prioridade);
+    }
+  }, [tarefaParaEditar]);
+
+  const handleSubmit = () => {
+    if (!titulo || !data) {
+      setMensagem("Título e Data são obrigatórios!");
+      return;
     }
 
-    const handleAddTask = () => {
-        if(!titulo || !descricao || !data || !prioridade){
-            setMensagem("Preencha todos os campos");
-            setTipoMensagem("erro");
-            return;
+    if (tarefaParaEditar) {
+      editTarefa(tarefaParaEditar.id, titulo, descricao, data, prioridade);
+      setMensagem("Tarefa editada com sucesso!");
+      setTarefaParaEditar(null); // limpa o estado
+    } else {
+      addTarefa(titulo, descricao, data, prioridade);
+      setMensagem("Tarefa adicionada com sucesso!");
     }
-    addTarefa(titulo, descricao, data, prioridade);
-    setMensagem("Tarefa adicionada com sucesso");
-    setTipoMensagem("sucesso");
-    clearInputs();
 
-}
-    
-    
+    // limpa formulário se for adicionar nova tarefa
+    if (!tarefaParaEditar) {
+      setTitulo("");
+      setDescricao("");
+      setData("");
+      setPrioridade("Média");
+    }
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Adicionar Tarefa</Text>
-            <TextInput
-            style={styles.input}
-            placeholder="Titulo"
-            value={titulo}
-            onChangeText={setTitulo}
-            />
+    // opcional: voltar para MinhasTarefas
+    navigation.navigate("MinhasTarefas");
+  };
 
-            <Text style={styles.label}>Descrição</Text>
-            <TextInput
-            style={styles.input}
-            placeholder="Digite a descrição"
-            value={descricao}
-            onChangeText={setDescricao}
-            />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Título *</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite o título"
+        value={titulo}
+        onChangeText={setTitulo}
+      />
 
-            <Text style={styles.label}>Data</Text>
-            <TextInput
-            style={styles.input}
-            placeholder="Digite a data"
-            value={data}
-            onChangeText={setData}
-            />
+      <Text style={styles.label}>Descrição</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite a descrição"
+        value={descricao}
+        onChangeText={setDescricao}
+      />
 
-            <Text style={styles.label}>Prioridade</Text>
-            <Picker selectedValue ={prioridade} onValueChange={(itemValue)=> setPrioridade(itemValue)} style={styles.input}>
-                <Picker.Item label="Baixa" value="baixa" />
-                <Picker.Item label="Média" value="media" />
-                <Picker.Item label="Alta" value="alta" />
-            </Picker>
-          
-          <TouchableOpacity onPress={handleAddTask}>
-            <Text>Adicionar Tarefa</Text>
-          </TouchableOpacity>
+      <Text style={styles.label}>Data *</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="AAAA-MM-DD"
+        value={data}
+        onChangeText={setData}
+      />
 
-          {mensagem? (
-            <Text style={tipoMensgem == 'erro' ? styles.erro : styles.sucesso}>{mensagem}</Text>
-          ): null}
-        </View>
-    )
+      <Text style={styles.label}>Prioridade</Text>
+      <Picker
+        selectedValue={prioridade}
+        onValueChange={(itemValue) => setPrioridade(itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="Baixa" value="Baixa" />
+        <Picker.Item label="Média" value="Média" />
+        <Picker.Item label="Alta" value="Alta" />
+      </Picker>
 
-    
+      {mensagem ? <Text style={styles.mensagem}>{mensagem}</Text> : null}
+
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>
+          {tarefaParaEditar ? "Editar Tarefa" : "Adicionar Tarefa"}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("MinhasTarefas")}>
+  <Text>Ir para MinhasTarefas</Text>
+</TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16 },
-    input: { borderWidth: 1, padding: 8, marginBottom: 10 },
-    label: { fontWeight: 'bold', marginBottom: 4 },
-    erro: { color: 'red', marginTop: 8 },
-    sucesso: { color: 'green', marginTop: 8 }
+  container: { flex: 1, padding: 16, backgroundColor: "#f5f5f5" },
+  label: { fontWeight: "bold", marginTop: 12 },
+  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 6, padding: 8, marginTop: 4 },
+  button: { backgroundColor: "#007bff", padding: 14, borderRadius: 8, marginTop: 20, alignItems: "center" },
+  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  mensagem: { color: "green", marginTop: 10, textAlign: "center" }
 });

@@ -17,7 +17,7 @@ Permite adicionar, editar, excluir e marcar tarefas como concluídas, além de f
    `git clone https://github.com/camisbersann/TarefasDiarias-app.git`
    
 2. Instale as dependências:\
-`npm install`
+`npm install expo`
 
 3. Instale dependências adicionais:\
    `npx expo install react-dom react-native-web @expo/metro-runtime`\

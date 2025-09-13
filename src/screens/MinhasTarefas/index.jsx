@@ -99,13 +99,21 @@ export default function MinhasTarefas({ navigation }) {
         ListEmptyComponent={<Text style={styles.empty}>Nenhuma tarefa cadastrada</Text>}
       />
 
-      {/* Botão adicionar nova tarefa */}
+    <View style={styles.buttons}>
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate('AddTarefa')}
       >
         <Text style={styles.addButtonText}>Adicionar Nova Tarefa</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate('WelcomeScreen')}
+      >
+        <Text style={styles.homeButtonText}>Home</Text>
+      </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -157,20 +165,34 @@ const styles = StyleSheet.create({
   empty: { 
     textAlign: 'center', 
     marginTop: 50, 
-    color: '#555' 
+    color: '#7B0000',
+    fontSize: 15
   },
   addButton: {
     backgroundColor: "#779ECB", 
     padding: 12, 
-    borderRadius: 14, 
-    marginTop: 20, 
-    alignItems: "center", 
-    marginBottom: 30
+    borderRadius: 14,
+    marginTop: 10,
+    width: 150,
+   
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   addButtonText: { 
     color: '#fff', 
     fontWeight: 'bold', 
-    fontSize: 16 
+    fontSize: 16, 
+    textAlign: 'center'
+  },
+  homeButtonText:{
+    color: '#fff', 
+    fontWeight: 'bold', 
+    fontSize: 16, 
+    textAlign: 'center',
+    marginTop: 8
   },
   contador: { 
     fontSize: 16, 
@@ -198,4 +220,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
    
   },
+  
+  
 });

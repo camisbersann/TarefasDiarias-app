@@ -27,7 +27,7 @@ Permite adicionar, editar, excluir e marcar tarefas como concluídas, além de f
   `npm install @react-navigation/native-stack`\
   `npm install react-native-gesture-handler`\
   `npm install @react-native-picker/picker`\
-  `npm install react-native-vector-icons`\
+  `npm install @fortawesome/fontawesome-svg-core@6`\
   `npm install date-fns`
 
 ## Executando o App:

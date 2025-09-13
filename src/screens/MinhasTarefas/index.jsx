@@ -1,12 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { TaskContext } from '../../context/TaskContext';
 import { FontAwesome } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
+import { format } from 'date-fns';
 
 export default function MinhasTarefas({ navigation }) {
   const { tarefas, removeTarefa, toggleConcluida, setTarefaParaEditar } = useContext(TaskContext);
 
+  const [filtroPrioridade, setFiltroPrioridade] = useState("");
+  const [filtroStatus, setFiltroStatus] = useState("");
+
   const tarefasConcluidas = tarefas.filter(t => t.status === 'concluída').length;
+
+  const tarefasFiltradas = useMemo (() => {
+    return tarefas.filter(t => {
+      const filtraPrioridade = filtroPrioridade ?  t.prioridade == filtroPrioridade: true;
+      const filtraStatus = filtroStatus ? t.status == filtroStatus : true;
+      return filtraPrioridade && filtraStatus;
+    });
+  }, [tarefas, filtroPrioridade, filtroStatus]);
 
   const renderItem = ({ item }) => {
     const isConcluida = item.status === 'concluída';
@@ -16,7 +29,7 @@ export default function MinhasTarefas({ navigation }) {
         <View style={styles.cardContent}>
           <Text style={styles.titulo}>{item.titulo}</Text>
           <Text style={styles.descricao}>{item.descricao}</Text>
-          <Text style={styles.info}>Data: {item.data}</Text>
+          <Text style={styles.info}>Data: {format(new Date(item.data), 'dd/MM/yyyy')}</Text>
           <Text style={styles.info}>Prioridade: {item.prioridade}</Text>
         </View>
 
@@ -52,8 +65,35 @@ export default function MinhasTarefas({ navigation }) {
         {tarefasConcluidas} / {tarefas.length} tarefas concluídas
       </Text>
 
+      <View style={styles.filtrosContainer}>
+        <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={filtroPrioridade}
+          onValueChange={setFiltroPrioridade}
+          style={styles.picker}
+        >
+          <Picker.Item label="Todas prioridades" value="" />
+          <Picker.Item label="Baixa" value="Baixa" />
+          <Picker.Item label="Média" value="Média" />
+          <Picker.Item label="Alta" value="Alta" />
+        </Picker>
+        </View>
+
+        <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={filtroStatus}
+          onValueChange={setFiltroStatus}
+          style={styles.picker}
+        >
+          <Picker.Item label="Todos status" value="" />
+          <Picker.Item label="Concluída" value="concluída" />
+          <Picker.Item label="Pendente" value="pendente" />
+        </Picker>
+        </View>
+        </View>
+
       <FlatList
-        data={tarefas}
+        data={tarefasFiltradas}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListEmptyComponent={<Text style={styles.empty}>Nenhuma tarefa cadastrada</Text>}
@@ -79,7 +119,6 @@ const styles = StyleSheet.create({
   contador: { 
     fontSize: 16, 
     fontWeight: 'bold', 
-    marginBottom: 12 
   },
   card: {
     backgroundColor: '#fff',
@@ -89,7 +128,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    elevation: 2
+    elevation: 2,
+    marginTop: 10
   },
   cardContent: { 
     flex: 1, 
@@ -120,15 +160,42 @@ const styles = StyleSheet.create({
     color: '#555' 
   },
   addButton: {
-    backgroundColor: '#007bff',
-    padding: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10
+    backgroundColor: "#779ECB", 
+    padding: 12, 
+    borderRadius: 14, 
+    marginTop: 20, 
+    alignItems: "center", 
+    marginBottom: 30
   },
   addButtonText: { 
     color: '#fff', 
     fontWeight: 'bold', 
     fontSize: 16 
+  },
+  contador: { 
+    fontSize: 16, 
+    fontWeight: 'bold', 
+    marginBottom: 12 
+  },
+  filtrosContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    marginTop: 15
+  },
+  picker: {
+   height: 60,
+   color: "#000"
+  },
+  pickerContainer: {
+    flex: 1,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 8,
+    overflow: 'hidden',
+    height: 45, 
+    justifyContent: 'center',
+   
   },
 });

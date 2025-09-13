@@ -10,7 +10,7 @@ import { TaskProvider } from "./src/context/TaskContext";
 
 const Stack = createNativeStackNavigator();
 
-// Tela de boas-vindas direto aqui
+// Tela de boas-vindas
 function WelcomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -34,6 +34,7 @@ function WelcomeScreen({ navigation }) {
   );
 }
 
+// App principal com navegação e contexo
 export default function App() {
   return (
     <TaskProvider>
@@ -76,6 +77,7 @@ export default function App() {
   );
 }
 
+//Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,

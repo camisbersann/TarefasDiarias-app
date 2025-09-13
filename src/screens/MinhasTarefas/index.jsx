@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { format } from 'date-fns';
 
+// Tela que exibe todas as tarefas do usuário
 export default function MinhasTarefas({ navigation }) {
   const { tarefas, removeTarefa, toggleConcluida, setTarefaParaEditar } = useContext(TaskContext);
 
@@ -13,6 +14,7 @@ export default function MinhasTarefas({ navigation }) {
 
   const tarefasConcluidas = tarefas.filter(t => t.status === 'concluída').length;
 
+  // Filtra tarefas por prioridade e status
   const tarefasFiltradas = useMemo (() => {
     return tarefas.filter(t => {
       const filtraPrioridade = filtroPrioridade ?  t.prioridade == filtroPrioridade: true;
@@ -21,8 +23,9 @@ export default function MinhasTarefas({ navigation }) {
     });
   }, [tarefas, filtroPrioridade, filtroStatus]);
 
+   // Renderiza cada tarefa
   const renderItem = ({ item }) => {
-    const isConcluida = item.status === 'concluída';
+    const isConcluida = item.status == 'concluída';
 
     return (
       <View style={styles.card}>
@@ -65,6 +68,7 @@ export default function MinhasTarefas({ navigation }) {
         {tarefasConcluidas} / {tarefas.length} tarefas concluídas
       </Text>
 
+      {/* Filtros */}
       <View style={styles.filtrosContainer}>
         <View style={styles.pickerContainer}>
         <Picker
@@ -91,7 +95,8 @@ export default function MinhasTarefas({ navigation }) {
         </Picker>
         </View>
         </View>
-
+      
+      {/* Lista de tarefas */}
       <FlatList
         data={tarefasFiltradas}
         keyExtractor={(item) => item.id.toString()}
@@ -99,6 +104,7 @@ export default function MinhasTarefas({ navigation }) {
         ListEmptyComponent={<Text style={styles.empty}>Nenhuma tarefa cadastrada</Text>}
       />
 
+       {/* Botões */}
     <View style={styles.buttons}>
       <TouchableOpacity
         style={styles.addButton}
@@ -118,6 +124,7 @@ export default function MinhasTarefas({ navigation }) {
   );
 }
 
+//Estilos
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 

@@ -5,13 +5,13 @@ import { Picker } from "@react-native-picker/picker";
 import { TaskContext } from "../../context/TaskContext";
 import { format, isBefore, startOfDay } from "date-fns";
 
-
+// Tela para adicionar ou editar tarefas
 export default function AddTarefa({ navigation }) {
   const { addTarefa, editTarefa, tarefaParaEditar, setTarefaParaEditar } = useContext(TaskContext);
 
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [data, setData] = useState(null); // agora é um Date
+  const [data, setData] = useState(null);
   const [prioridade, setPrioridade] = useState("Média");
   const [mensagem, setMensagem] = useState("");
   const [showPicker, setShowPicker] = useState(false);
@@ -30,8 +30,9 @@ export default function AddTarefa({ navigation }) {
     }
   }, [tarefaParaEditar]);
 
+  // Atualiza a data escolhida
   const handleDateChange = (event, selectedDate) => {
-    setShowPicker(Platform.OS === "ios"); // fecha no Android
+    setShowPicker(Platform.OS == "ios");
     if (selectedDate) {
       const hoje = startOfDay(new Date());
       const dataSelecionada = startOfDay(selectedDate);
@@ -47,6 +48,7 @@ export default function AddTarefa({ navigation }) {
     }
   };
 
+   // Adiciona ou edita a tarefa
   const handleSubmit = () => {
     if (!titulo || !data) {
       setMensagem("Todos os campos são obrigatórios!");
@@ -77,11 +79,13 @@ export default function AddTarefa({ navigation }) {
     navigation.navigate("MinhasTarefas");
   };
 
+   // Cancela a edição e volta à lista
   const handleCancel = () => {
     setTarefaParaEditar(null); 
     navigation.navigate("MinhasTarefas");
   };
 
+   // Renderiza a tela
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Título *</Text>
@@ -143,6 +147,7 @@ export default function AddTarefa({ navigation }) {
   );
 }
 
+//Estilos
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 

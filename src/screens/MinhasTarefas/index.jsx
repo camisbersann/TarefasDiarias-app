@@ -46,12 +46,12 @@ export default function MinhasTarefas({ navigation }) {
               navigation.navigate('AddTarefa', { editar: true });
             }}
           >
-            <FontAwesome name="edit" size={30} color="blue" />
+            <FontAwesome name="edit" size={30} color="#3065AC" />
           </TouchableOpacity>
 
           {/* Excluir */}
           <TouchableOpacity onPress={() => removeTarefa(item.id)}>
-           <FontAwesome name="trash" size={30} color="red" />
+           <FontAwesome name="trash" size={30} color="#CF0E0E" />
           </TouchableOpacity>
         </View>
       </View>
